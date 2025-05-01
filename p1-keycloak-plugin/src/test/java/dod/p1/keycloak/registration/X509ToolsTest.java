@@ -116,10 +116,10 @@ class X509ToolsTest {
         cryptoIntegrationMock = mockStatic(CryptoIntegration.class);
         cryptoIntegrationMock.when(CryptoIntegration::getProvider).thenReturn(dummyProvider);
 
-        // Static mocking for Config.scope("babyYodaOcsp")
+        // Static mocking for Config.scope("rapOcsp")
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             Config.Scope scope = mock(Config.Scope.class);
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("false");
         }
 
@@ -305,9 +305,9 @@ class X509ToolsTest {
     @Test
     void testIsX509RegisteredTrue() throws Exception {
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
-            Config.Scope babyYodaScope = mock(Config.Scope.class);
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(babyYodaScope);
-            when(babyYodaScope.get("enabled", "false")).thenReturn("true");
+            Config.Scope rapScope = mock(Config.Scope.class);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(rapScope);
+            when(rapScope.get("enabled", "false")).thenReturn("true");
 
             X509Certificate[] certList = {Utils.buildTestCertificate()};
             when(x509ClientCertificateLookup.getCertificateChain(httpRequest)).thenReturn(certList);

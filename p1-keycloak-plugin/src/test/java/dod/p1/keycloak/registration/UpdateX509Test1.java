@@ -93,7 +93,7 @@ public class UpdateX509Test1 {
         // Setup Config.scope mock
         configMock = Mockito.mockStatic(Config.class);
         mockScope = Mockito.mock(Config.Scope.class);
-        configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(mockScope);
+        configMock.when(() -> Config.scope("rapOcsp")).thenReturn(mockScope);
         when(mockScope.get("enabled", "false")).thenReturn("false");
     }
 

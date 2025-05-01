@@ -42,7 +42,7 @@ public class UpdateX509 implements RequiredActionProvider, RequiredActionFactory
     private static final Logger LOGGER = LogManager.getLogger(UpdateX509.class);
 
     /** Configuration scope for OCSP settings. */
-    private static final String OCSP_CONFIG_SCOPE = "babyYodaOcsp";
+    private static final String OCSP_CONFIG_SCOPE = "rapOcsp";
 
     /** Configuration key for OCSP enabled setting. */
     private static final String OCSP_ENABLED_KEY = "enabled";

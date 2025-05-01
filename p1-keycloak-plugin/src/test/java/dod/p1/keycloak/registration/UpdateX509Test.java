@@ -55,7 +55,7 @@ public class UpdateX509Test {
         System.setProperty("keycloak.fips", "false");
     }
 
-    // Global stub for Config.scope("babyYodaOcsp")
+    // Global stub for Config.scope("rapOcsp")
     private MockedStatic<Config> globalConfigMock;
     private Config.Scope globalMockScope;
 
@@ -97,7 +97,7 @@ public class UpdateX509Test {
     public void globalConfigStub() {
         globalConfigMock = Mockito.mockStatic(Config.class);
         globalMockScope = Mockito.mock(Config.Scope.class);
-        globalConfigMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(globalMockScope);
+        globalConfigMock.when(() -> Config.scope("rapOcsp")).thenReturn(globalMockScope);
         // Default value; tests can override as needed.
         when(globalMockScope.get("enabled", "false")).thenReturn("false");
     }
@@ -212,7 +212,7 @@ public class UpdateX509Test {
             x509ToolsMock.when(() -> X509Tools.extractURN(x509Certificate2)).thenReturn("urn");
             updateX509.evaluateTriggers(requiredActionContext);
 
-            // Override global config stub to return "true" for babyYodaOcsp.enabled
+            // Override global config stub to return "true" for rapOcsp.enabled
             when(globalMockScope.get("enabled", "false")).thenReturn("true");
             updateX509.evaluateTriggers(requiredActionContext);
 

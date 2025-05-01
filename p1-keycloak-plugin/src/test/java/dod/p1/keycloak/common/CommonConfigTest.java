@@ -157,8 +157,8 @@ class CommonConfigTest {
 
     @Test
     void getUserIdentityAttributeTest() {
-        // For realm "baby-yoda", no suffix is appended.
-        when(realmModel.getName()).thenReturn("baby-yoda");
+        // For realm "rap", no suffix is appended.
+        when(realmModel.getName()).thenReturn("rap");
         CommonConfig commonConfig = CommonConfig.getInstance(keycloakSession, realmModel);
         assertEquals("usercertificate", commonConfig.getUserIdentityAttribute(realmModel));
     }

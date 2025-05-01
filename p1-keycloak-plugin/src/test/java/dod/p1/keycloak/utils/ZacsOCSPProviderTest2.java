@@ -37,7 +37,7 @@ public class ZacsOCSPProviderTest2 {
     static {
         STATIC_CONFIG_MOCK = mockStatic(Config.class);
         Config.Scope scopeMock = mock(Config.Scope.class);
-        STATIC_CONFIG_MOCK.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scopeMock);
+        STATIC_CONFIG_MOCK.when(() -> Config.scope("rapOcsp")).thenReturn(scopeMock);
         // Provide non-null values so that .trim() calls succeed.
         when(scopeMock.get("ignoreList", "")).thenReturn("");
         when(scopeMock.get("nonceIgnoreList", "")).thenReturn("");

@@ -109,10 +109,10 @@ class CommonConfigAdditionalTest {
     void testInvalidEmailDomainFormat() {
         // The setup already uses yamlWithInvalidEmailDomain
         CommonConfig commonConfig = CommonConfig.getInstance(keycloakSession, realmModel);
-        
+
         // Get email match auto join groups
         List<?> emailGroups = commonConfig.getEmailMatchAutoJoinGroup().toList();
-        
+
         // Should be empty because the invalid domain should have been filtered out
         assertTrue(emailGroups.isEmpty(), "Email groups with invalid domains should be filtered out");
     }
@@ -129,11 +129,11 @@ class CommonConfigAdditionalTest {
         Config.Scope scopeMock = mock(Config.Scope.class);
         when(scopeMock.get(eq("configFilePath"), anyString())).thenReturn("/custom/path/config.yaml");
         configMock.when(() -> Config.scope("customRegistration")).thenReturn(scopeMock);
-        
+
         // Create a new instance to trigger the code path
         CommonConfig commonConfig = CommonConfig.getInstance(keycloakSession, realmModel);
         assertNotNull(commonConfig, "CommonConfig should be created successfully");
-        
+
         // Verify that our Config.scope mock was called
         configMock.verify(() -> Config.scope("customRegistration"));
     }
@@ -152,10 +152,10 @@ class CommonConfigAdditionalTest {
     void testMultiRealmConfigurationWithNullScope() {
         // Mock Config.scope for multiRealm to return null
         configMock.when(() -> Config.scope("multiRealm")).thenReturn(null);
-        
+
         CommonConfig commonConfig = CommonConfig.getInstance(keycloakSession, realmModel);
         String attribute = commonConfig.getUserIdentityAttribute(realmModel);
-        
+
         // Should return the plain attribute without realm suffix
         assertEquals("usercertificate", attribute, "Should return plain attribute when multi-realm scope is null");
     }
@@ -169,16 +169,16 @@ class CommonConfigAdditionalTest {
         Config.Scope scopeMock = mock(Config.Scope.class);
         when(scopeMock.get(eq("enabled"), eq("false"))).thenReturn("false");
         configMock.when(() -> Config.scope("multiRealm")).thenReturn(scopeMock);
-        
+
         CommonConfig commonConfig = CommonConfig.getInstance(keycloakSession, realmModel);
         String attribute = commonConfig.getUserIdentityAttribute(realmModel);
-        
+
         // Should return the plain attribute without realm suffix
         assertEquals("usercertificate", attribute, "Should return plain attribute when multi-realm is disabled");
     }
 
     /**
-     * Test multi-realm configuration with non-baby-yoda realm.
+     * Test multi-realm configuration with non-rap realm.
      */
     @Test
     void testMultiRealmConfigurationEnabled() {
@@ -186,16 +186,16 @@ class CommonConfigAdditionalTest {
         Config.Scope scopeMock = mock(Config.Scope.class);
         when(scopeMock.get(eq("enabled"), eq("false"))).thenReturn("true");
         configMock.when(() -> Config.scope("multiRealm")).thenReturn(scopeMock);
-        
-        // Use a non-baby-yoda realm
+
+        // Use a non-rap realm
         when(realmModel.getName()).thenReturn("other-realm");
-        
+
         CommonConfig commonConfig = CommonConfig.getInstance(keycloakSession, realmModel);
         String attribute = commonConfig.getUserIdentityAttribute(realmModel);
-        
+
         // Should return the attribute with realm suffix
-        assertEquals("usercertificate_other-realm", attribute, 
-                "Should return attribute with realm suffix when multi-realm is enabled and realm is not baby-yoda");
+        assertEquals("usercertificate_other-realm", attribute,
+                "Should return attribute with realm suffix when multi-realm is enabled and realm is not rap");
     }
 
     /**
@@ -206,20 +206,20 @@ class CommonConfigAdditionalTest {
         // Create two different realm models
         RealmModel realm1 = mock(RealmModel.class);
         when(realm1.getName()).thenReturn("realm1");
-        
+
         RealmModel realm2 = mock(RealmModel.class);
         when(realm2.getName()).thenReturn("realm2");
-        
+
         // Get instances for both realms
         CommonConfig config1 = CommonConfig.getInstance(keycloakSession, realm1);
         CommonConfig config2 = CommonConfig.getInstance(keycloakSession, realm2);
-        
+
         // Should be different instances
         assertNotSame(config1, config2, "Different realms should have different CommonConfig instances");
-        
+
         // Get instance for realm1 again
         CommonConfig config1Again = CommonConfig.getInstance(keycloakSession, realm1);
-        
+
         // Should be the same instance
         assertSame(config1, config1Again, "Same realm should return the same CommonConfig instance");
     }

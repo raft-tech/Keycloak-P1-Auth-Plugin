@@ -85,7 +85,7 @@ public class OCSPUtilsTest2 {
             }
         };
         STATIC_CONFIG_MOCK = Mockito.mockStatic(Config.class);
-        STATIC_CONFIG_MOCK.when(() -> Config.scope("babyYodaOcsp")).thenReturn(defaultScope);
+        STATIC_CONFIG_MOCK.when(() -> Config.scope("rapOcsp")).thenReturn(defaultScope);
     }
 
     @AfterAll

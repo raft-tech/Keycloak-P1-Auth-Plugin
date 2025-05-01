@@ -94,10 +94,10 @@ class OCSPCheckAuthenticatorTest {
 
     @Test
     void testAuthenticate_OCSPDisabled() throws Exception {
-        // We want to mock Config.scope("babyYodaOcsp") => scope
+        // We want to mock Config.scope("rapOcsp") => scope
         // and scope.get("enabled", "false") => "false"
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("false");
 
             // Run
@@ -119,7 +119,7 @@ class OCSPCheckAuthenticatorTest {
         try (MockedStatic<Config> configMock = mockStatic(Config.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             // Stub additional configuration if needed (not used since chain is null)
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
@@ -150,7 +150,7 @@ class OCSPCheckAuthenticatorTest {
         try (MockedStatic<Config> configMock = mockStatic(Config.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             // Stub cache configuration to avoid NPE
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
@@ -182,7 +182,7 @@ class OCSPCheckAuthenticatorTest {
         try (MockedStatic<Config> configMock = mockStatic(Config.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             // Stub cache configuration to avoid NPE
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
@@ -220,7 +220,7 @@ class OCSPCheckAuthenticatorTest {
         try (MockedStatic<Config> configMock = mockStatic(Config.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             // Stub cache configuration to avoid NPE
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");

@@ -139,7 +139,7 @@ public class ZacsOCSPProviderTest {
         Exception exception = assertThrows(Exception.class, () -> {
             validateResponderURIsMethod.invoke(ocspProvider, (Object) null);
         }, "Should throw exception for null responder URIs");
-        
+
         // Check that the cause is IllegalArgumentException
         Throwable cause = exception.getCause();
         assertTrue(cause instanceof IllegalArgumentException, "Cause should be IllegalArgumentException");
@@ -157,7 +157,7 @@ public class ZacsOCSPProviderTest {
         Exception exception = assertThrows(Exception.class, () -> {
             validateResponderURIsMethod.invoke(ocspProvider, new ArrayList<URI>());
         }, "Should throw exception for empty responder URIs");
-        
+
         // Check that the cause is IllegalArgumentException
         Throwable cause = exception.getCause();
         assertTrue(cause instanceof IllegalArgumentException, "Cause should be IllegalArgumentException");
@@ -186,7 +186,7 @@ public class ZacsOCSPProviderTest {
         createMockOCSPResponseMethod.setAccessible(true);
 
         BCOCSPProvider.OCSPRevocationStatus result = (BCOCSPProvider.OCSPRevocationStatus) createMockOCSPResponseMethod.invoke(ocspProvider, "ocsp.example.com");
-        
+
         assertNotNull(result, "Mock OCSP response should not be null");
         assertEquals(BCOCSPProvider.RevocationStatus.GOOD, result.getRevocationStatus(), "Revocation status should be GOOD");
         assertEquals(CRLReason.UNSPECIFIED, result.getRevocationReason(), "Revocation reason should be UNSPECIFIED");
@@ -194,7 +194,7 @@ public class ZacsOCSPProviderTest {
     }
 
     // Removed testGetResponderURIsPublic as it requires complex mocking of static methods
-    
+
     /**
      * Test for the logOCSPRequest method with nonce enforced.
      */
@@ -202,17 +202,17 @@ public class ZacsOCSPProviderTest {
     public void testLogOCSPRequest_WithNonce() throws Exception {
         Method logOCSPRequestMethod = ZacsOCSPProvider.class.getDeclaredMethod("logOCSPRequest", OCSPReq.class, boolean.class);
         logOCSPRequestMethod.setAccessible(true);
-        
+
         // Create a mock OCSPReq
         OCSPReq ocspReq = mock(OCSPReq.class);
         when(ocspReq.getEncoded()).thenReturn(new byte[]{1, 2, 3, 4});
-        
+
         // Call the method with nonce enforced
         logOCSPRequestMethod.invoke(ocspProvider, ocspReq, true);
-        
+
         // No exception should be thrown
     }
-    
+
     /**
      * Test for the logOCSPRequest method without nonce enforced.
      */
@@ -220,17 +220,17 @@ public class ZacsOCSPProviderTest {
     public void testLogOCSPRequest_WithoutNonce() throws Exception {
         Method logOCSPRequestMethod = ZacsOCSPProvider.class.getDeclaredMethod("logOCSPRequest", OCSPReq.class, boolean.class);
         logOCSPRequestMethod.setAccessible(true);
-        
+
         // Create a mock OCSPReq
         OCSPReq ocspReq = mock(OCSPReq.class);
         when(ocspReq.getEncoded()).thenReturn(new byte[]{1, 2, 3, 4});
-        
+
         // Call the method without nonce enforced
         logOCSPRequestMethod.invoke(ocspProvider, ocspReq, false);
-        
+
         // No exception should be thrown
     }
-    
+
     /**
      * Test for the logOCSPRequest method with encoding exception.
      */
@@ -238,17 +238,17 @@ public class ZacsOCSPProviderTest {
     public void testLogOCSPRequest_EncodingException() throws Exception {
         Method logOCSPRequestMethod = ZacsOCSPProvider.class.getDeclaredMethod("logOCSPRequest", OCSPReq.class, boolean.class);
         logOCSPRequestMethod.setAccessible(true);
-        
+
         // Create a mock OCSPReq that throws IOException when getEncoded is called
         OCSPReq ocspReq = mock(OCSPReq.class);
         when(ocspReq.getEncoded()).thenThrow(new IOException("Test encoding exception"));
-        
+
         // Call the method with nonce enforced
         logOCSPRequestMethod.invoke(ocspProvider, ocspReq, true);
-        
+
         // No exception should be thrown, the lambda should handle the exception
     }
-    
+
     /**
      * Test for the logOcspResponse method with successful encoding.
      */
@@ -256,17 +256,17 @@ public class ZacsOCSPProviderTest {
     public void testLogOcspResponse_Success() throws Exception {
         Method logOcspResponseMethod = ZacsOCSPProvider.class.getDeclaredMethod("logOcspResponse", OCSPResp.class);
         logOcspResponseMethod.setAccessible(true);
-        
+
         // Create a mock OCSPResp
         OCSPResp ocspResp = mock(OCSPResp.class);
         when(ocspResp.getEncoded()).thenReturn(new byte[]{1, 2, 3, 4});
-        
+
         // Call the method
         logOcspResponseMethod.invoke(ocspProvider, ocspResp);
-        
+
         // No exception should be thrown
     }
-    
+
     /**
      * Test for the logOcspResponse method with encoding exception.
      */
@@ -274,17 +274,17 @@ public class ZacsOCSPProviderTest {
     public void testLogOcspResponse_EncodingException() throws Exception {
         Method logOcspResponseMethod = ZacsOCSPProvider.class.getDeclaredMethod("logOcspResponse", OCSPResp.class);
         logOcspResponseMethod.setAccessible(true);
-        
+
         // Create a mock OCSPResp that throws IOException when getEncoded is called
         OCSPResp ocspResp = mock(OCSPResp.class);
         when(ocspResp.getEncoded()).thenThrow(new IOException("Test encoding exception"));
-        
+
         // Call the method
         logOcspResponseMethod.invoke(ocspProvider, ocspResp);
-        
+
         // No exception should be thrown, the method should handle the exception
     }
-    
+
     /**
      * Test for the loadOcspIgnoreList method with non-empty list.
      */
@@ -292,18 +292,18 @@ public class ZacsOCSPProviderTest {
     public void testLoadOcspIgnoreList_NonEmptyList() throws Exception {
         Method loadOcspIgnoreListMethod = ZacsOCSPProvider.class.getDeclaredMethod("loadOcspIgnoreList");
         loadOcspIgnoreListMethod.setAccessible(true);
-        
+
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             // Mock Config.scope
             Config.Scope scopeMock = mock(Config.Scope.class);
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scopeMock);
-            
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scopeMock);
+
             // Mock scope.get to return a non-empty list
             when(scopeMock.get("ignoreList", "")).thenReturn("ocsp.example.com, ocsp.test.com");
-            
+
             // Call the method
             List<String> result = (List<String>) loadOcspIgnoreListMethod.invoke(null);
-            
+
             // Verify the result
             assertNotNull(result, "Result should not be null");
             assertEquals(2, result.size(), "Result should contain two entries");
@@ -311,7 +311,7 @@ public class ZacsOCSPProviderTest {
             assertTrue(result.contains("ocsp.test.com"), "Result should contain ocsp.test.com");
         }
     }
-    
+
     /**
      * Test for the loadOcspIgnoreList method with empty list.
      */
@@ -319,24 +319,24 @@ public class ZacsOCSPProviderTest {
     public void testLoadOcspIgnoreList_EmptyList() throws Exception {
         Method loadOcspIgnoreListMethod = ZacsOCSPProvider.class.getDeclaredMethod("loadOcspIgnoreList");
         loadOcspIgnoreListMethod.setAccessible(true);
-        
+
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             // Mock Config.scope
             Config.Scope scopeMock = mock(Config.Scope.class);
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scopeMock);
-            
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scopeMock);
+
             // Mock scope.get to return an empty string
             when(scopeMock.get("ignoreList", "")).thenReturn("");
-            
+
             // Call the method
             List<String> result = (List<String>) loadOcspIgnoreListMethod.invoke(null);
-            
+
             // Verify the result
             assertNotNull(result, "Result should not be null");
             assertTrue(result.isEmpty(), "Result should be empty");
         }
     }
-    
+
     /**
      * Test for the loadOcspIgnoreList method with null list.
      */
@@ -344,24 +344,24 @@ public class ZacsOCSPProviderTest {
     public void testLoadOcspIgnoreList_NullList() throws Exception {
         Method loadOcspIgnoreListMethod = ZacsOCSPProvider.class.getDeclaredMethod("loadOcspIgnoreList");
         loadOcspIgnoreListMethod.setAccessible(true);
-        
+
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             // Mock Config.scope
             Config.Scope scopeMock = mock(Config.Scope.class);
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scopeMock);
-            
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scopeMock);
+
             // Mock scope.get to return null
             when(scopeMock.get("ignoreList", "")).thenReturn(null);
-            
+
             // Call the method
             List<String> result = (List<String>) loadOcspIgnoreListMethod.invoke(null);
-            
+
             // Verify the result
             assertNotNull(result, "Result should not be null");
             assertTrue(result.isEmpty(), "Result should be empty");
         }
     }
-    
+
     /**
      * Test for the loadOcspIgnoreList method with exception.
      */
@@ -369,20 +369,20 @@ public class ZacsOCSPProviderTest {
     public void testLoadOcspIgnoreList_Exception() throws Exception {
         Method loadOcspIgnoreListMethod = ZacsOCSPProvider.class.getDeclaredMethod("loadOcspIgnoreList");
         loadOcspIgnoreListMethod.setAccessible(true);
-        
+
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             // Mock Config.scope to throw an exception
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenThrow(new RuntimeException("Test exception"));
-            
+            configMock.when(() -> Config.scope("rapOcsp")).thenThrow(new RuntimeException("Test exception"));
+
             // Call the method
             List<String> result = (List<String>) loadOcspIgnoreListMethod.invoke(null);
-            
+
             // Verify the result
             assertNotNull(result, "Result should not be null");
             assertTrue(result.isEmpty(), "Result should be empty");
         }
     }
-    
+
     /**
      * Test for the loadNonceExcludedResponders method with non-empty list.
      */
@@ -390,18 +390,18 @@ public class ZacsOCSPProviderTest {
     public void testLoadNonceExcludedResponders_NonEmptyList() throws Exception {
         Method loadNonceExcludedRespondersMethod = ZacsOCSPProvider.class.getDeclaredMethod("loadNonceExcludedResponders");
         loadNonceExcludedRespondersMethod.setAccessible(true);
-        
+
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             // Mock Config.scope
             Config.Scope scopeMock = mock(Config.Scope.class);
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scopeMock);
-            
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scopeMock);
+
             // Mock scope.get to return a non-empty list
             when(scopeMock.get("nonceIgnoreList", "")).thenReturn("ocsp.example.com, ocsp.test.com");
-            
+
             // Call the method
             List<String> result = (List<String>) loadNonceExcludedRespondersMethod.invoke(null);
-            
+
             // Verify the result
             assertNotNull(result, "Result should not be null");
             assertEquals(2, result.size(), "Result should contain two entries");
@@ -409,7 +409,7 @@ public class ZacsOCSPProviderTest {
             assertTrue(result.contains("ocsp.test.com"), "Result should contain ocsp.test.com");
         }
     }
-    
+
     /**
      * Test for the loadNonceExcludedResponders method with empty list.
      */
@@ -417,24 +417,24 @@ public class ZacsOCSPProviderTest {
     public void testLoadNonceExcludedResponders_EmptyList() throws Exception {
         Method loadNonceExcludedRespondersMethod = ZacsOCSPProvider.class.getDeclaredMethod("loadNonceExcludedResponders");
         loadNonceExcludedRespondersMethod.setAccessible(true);
-        
+
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             // Mock Config.scope
             Config.Scope scopeMock = mock(Config.Scope.class);
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scopeMock);
-            
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scopeMock);
+
             // Mock scope.get to return an empty string
             when(scopeMock.get("nonceIgnoreList", "")).thenReturn("");
-            
+
             // Call the method
             List<String> result = (List<String>) loadNonceExcludedRespondersMethod.invoke(null);
-            
+
             // Verify the result
             assertNotNull(result, "Result should not be null");
             assertTrue(result.isEmpty(), "Result should be empty");
         }
     }
-    
+
     /**
      * Test for the loadNonceExcludedResponders method with null list.
      */
@@ -442,24 +442,24 @@ public class ZacsOCSPProviderTest {
     public void testLoadNonceExcludedResponders_NullList() throws Exception {
         Method loadNonceExcludedRespondersMethod = ZacsOCSPProvider.class.getDeclaredMethod("loadNonceExcludedResponders");
         loadNonceExcludedRespondersMethod.setAccessible(true);
-        
+
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             // Mock Config.scope
             Config.Scope scopeMock = mock(Config.Scope.class);
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scopeMock);
-            
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scopeMock);
+
             // Mock scope.get to return null
             when(scopeMock.get("nonceIgnoreList", "")).thenReturn(null);
-            
+
             // Call the method
             List<String> result = (List<String>) loadNonceExcludedRespondersMethod.invoke(null);
-            
+
             // Verify the result
             assertNotNull(result, "Result should not be null");
             assertTrue(result.isEmpty(), "Result should be empty");
         }
     }
-    
+
     /**
      * Test for the loadNonceExcludedResponders method with exception.
      */
@@ -467,20 +467,20 @@ public class ZacsOCSPProviderTest {
     public void testLoadNonceExcludedResponders_Exception() throws Exception {
         Method loadNonceExcludedRespondersMethod = ZacsOCSPProvider.class.getDeclaredMethod("loadNonceExcludedResponders");
         loadNonceExcludedRespondersMethod.setAccessible(true);
-        
+
         try (MockedStatic<Config> configMock = mockStatic(Config.class)) {
             // Mock Config.scope to throw an exception
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenThrow(new RuntimeException("Test exception"));
-            
+            configMock.when(() -> Config.scope("rapOcsp")).thenThrow(new RuntimeException("Test exception"));
+
             // Call the method
             List<String> result = (List<String>) loadNonceExcludedRespondersMethod.invoke(null);
-            
+
             // Verify the result
             assertNotNull(result, "Result should not be null");
             assertTrue(result.isEmpty(), "Result should be empty");
         }
     }
-    
+
     /**
      * Test for the check method with a responder in the ignore list.
      */
@@ -488,15 +488,15 @@ public class ZacsOCSPProviderTest {
     public void testCheck_MockResponse() throws Exception {
         Method createMockOCSPResponseMethod = ZacsOCSPProvider.class.getDeclaredMethod("createMockOCSPResponse", String.class);
         createMockOCSPResponseMethod.setAccessible(true);
-        
+
         BCOCSPProvider.OCSPRevocationStatus result = (BCOCSPProvider.OCSPRevocationStatus) createMockOCSPResponseMethod.invoke(ocspProvider, "ocsp.example.com");
-        
+
         assertNotNull(result, "Mock OCSP response should not be null");
         assertEquals(BCOCSPProvider.RevocationStatus.GOOD, result.getRevocationStatus(), "Revocation status should be GOOD");
         assertEquals(CRLReason.UNSPECIFIED, result.getRevocationReason(), "Revocation reason should be UNSPECIFIED");
         assertNull(result.getRevocationTime(), "Revocation time should be null");
     }
-    
+
     /**
      * Test for the shouldIgnoreNonce method, which is used by buildOCSPRequest to determine if nonce should be enforced.
      */
@@ -507,14 +507,14 @@ public class ZacsOCSPProviderTest {
         List<String> ignoreList = Arrays.asList("ocsp.other.com");
         boolean result = ocspProvider.shouldIgnoreNonce(responderURI, ignoreList);
         assertFalse(result, "Should return false for responder not in ignore list");
-        
+
         // Test with a responder that should not have nonce enforced
         responderURI = "http://ocsp.example.com/ocsp";
         ignoreList = Arrays.asList("ocsp.example.com");
         result = ocspProvider.shouldIgnoreNonce(responderURI, ignoreList);
         assertTrue(result, "Should return true for responder in ignore list");
     }
-    
+
     /**
      * Test for the extractResponderCert method with empty certificates.
      */
@@ -522,17 +522,17 @@ public class ZacsOCSPProviderTest {
     public void testExtractResponderCert_EmptyCerts() throws Exception {
         // Create mocks
         BasicOCSPResp basicResp = mock(BasicOCSPResp.class);
-        
+
         // Set up the mocks to return empty certificates
         when(basicResp.getCerts()).thenReturn(new X509CertificateHolder[0]);
-        
+
         // Call the method
         X509Certificate result = ocspProvider.extractResponderCert(basicResp, issuerCertificate);
-        
+
         // Verify the result
         assertNull(result, "Result should be null for empty certificates");
     }
-    
+
     /**
      * Test for the extractResponderCert method with a certificate exception.
      */
@@ -541,16 +541,16 @@ public class ZacsOCSPProviderTest {
         // Create mocks
         BasicOCSPResp basicResp = mock(BasicOCSPResp.class);
         X509CertificateHolder certHolder = mock(X509CertificateHolder.class);
-        
+
         // Set up the mocks
         when(basicResp.getCerts()).thenReturn(new X509CertificateHolder[]{certHolder});
-        
+
         // Create a spy of the ocspProvider to mock the isResponderCertificate method
         ZacsOCSPProvider spyProvider = spy(ocspProvider);
-        
+
         // Mock the isResponderCertificate method to throw an exception
         doThrow(new RuntimeException("Test exception")).when(spyProvider).extractResponderCert(any(), any());
-        
+
         // Call the method and expect an exception
         assertThrows(RuntimeException.class, () -> {
             spyProvider.extractResponderCert(basicResp, issuerCertificate);
@@ -568,12 +568,12 @@ public class ZacsOCSPProviderTest {
         // Mock the certificate to have OCSP Signing extended key usage
         List<String> extendedKeyUsages = Arrays.asList(KeyPurposeId.id_kp_OCSPSigning.getId());
         when(certificate.getExtendedKeyUsage()).thenReturn(extendedKeyUsages);
-        
+
         // Mock the verify method to not throw an exception
         doNothing().when(certificate).verify(any());
 
         boolean result = (boolean) isResponderCertificateMethod.invoke(ocspProvider, certificate, issuerCertificate);
-        
+
         assertTrue(result, "Should return true for valid responder certificate");
     }
 
@@ -588,12 +588,12 @@ public class ZacsOCSPProviderTest {
         // Mock the certificate to not have OCSP Signing extended key usage
         List<String> extendedKeyUsages = Arrays.asList("1.3.6.1.5.5.7.3.1"); // TLS Web Server Authentication
         when(certificate.getExtendedKeyUsage()).thenReturn(extendedKeyUsages);
-        
+
         // Mock the verify method to not throw an exception
         doNothing().when(certificate).verify(any());
 
         boolean result = (boolean) isResponderCertificateMethod.invoke(ocspProvider, certificate, issuerCertificate);
-        
+
         assertFalse(result, "Should return false for certificate without OCSP Signing extended key usage");
     }
 
@@ -609,7 +609,7 @@ public class ZacsOCSPProviderTest {
         doThrow(new java.security.cert.CertificateException("Verification failed")).when(certificate).verify(any());
 
         boolean result = (boolean) isResponderCertificateMethod.invoke(ocspProvider, certificate, issuerCertificate);
-        
+
         assertFalse(result, "Should return false for certificate that fails verification");
     }
 }

@@ -122,7 +122,7 @@ public class ZacsOCSPProvider extends BCOCSPProvider {
     private static List<String> loadOcspIgnoreList() {
         List<String> ignoredResponders = new LinkedList<>();
         try {
-            String responders = Config.scope("babyYodaOcsp").get("ignoreList", "");
+            String responders = Config.scope("rapOcsp").get("ignoreList", "");
             if (responders != null) {
                 responders = responders.trim();
                 if (!responders.isEmpty()) {
@@ -154,7 +154,7 @@ public class ZacsOCSPProvider extends BCOCSPProvider {
     private static List<String> loadNonceExcludedResponders() {
         List<String> excludedResponders = new LinkedList<>();
         try {
-            String responders = Config.scope("babyYodaOcsp").get("nonceIgnoreList", "");
+            String responders = Config.scope("rapOcsp").get("nonceIgnoreList", "");
             if (responders != null) {
                 responders = responders.trim();
                 if (!responders.isEmpty()) {

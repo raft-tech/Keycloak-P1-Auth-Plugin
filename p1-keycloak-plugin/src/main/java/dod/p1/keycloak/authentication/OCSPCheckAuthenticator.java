@@ -78,9 +78,9 @@ public class OCSPCheckAuthenticator implements Authenticator {
     // Magic numbers replaced with constants
 
     /**
-     * A constant representing the configuration scope {@code babyYodaOcsp}.
+     * A constant representing the configuration scope {@code rapOcsp}.
      */
-    private static final String CONFIG_SCOPE = "babyYodaOcsp";
+    private static final String CONFIG_SCOPE = "rapOcsp";
 
     /**
      * A constant representing the configuration key {@code enabled}.

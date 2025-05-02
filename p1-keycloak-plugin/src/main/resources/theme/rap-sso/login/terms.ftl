@@ -32,16 +32,16 @@
                     </li>
                     <li>Internet / Intranet / Extranet-related systems, including but not limited to computer equipment, software,
                            operating systems, storage media, and network accounts providing electronic mail, Internet browsing, and
-                           file transfer protocol (FTP) capability that are owned or managed by Platform One are the property of Platform One.
-                           These systems are to be used for organizational purposes in serving the interests of Platform One, and of our clients
+                           file transfer protocol (FTP) capability that are owned or managed by RAP are the property of RAP.
+                           These systems are to be used for organizational purposes in serving the interests of RAP, and of our clients
                            and customers in the course of normal operations.
                     </li>
-                    <li>Accessing data, a server or an account for any purpose other than conducting Platform One business, even if you have
+                    <li>Accessing data, a server or an account for any purpose other than conducting RAP business, even if you have
                            authorized access, is prohibited. Revealing or sharing your account password, CAC credentials, or other MFA information,
                            methods, and codes to others or allowing use of your account by others is strictly prohibited.
                     </li>
-                    <li>There is the potential that information presented and exported from the Platform One contains Controlled Unclassified
-                           Information (CUI). It is the responsibility of all users to ensure information extracted from Platform One is appropriately
+                    <li>There is the potential that information presented and exported from the RAP contains Controlled Unclassified
+                           Information (CUI). It is the responsibility of all users to ensure information extracted from RAP is appropriately
                            marked and properly safeguarded. If you are not sure of the safeguards necessary for the information, contact your functional
                            lead or Information Security Officer.
                     </li>

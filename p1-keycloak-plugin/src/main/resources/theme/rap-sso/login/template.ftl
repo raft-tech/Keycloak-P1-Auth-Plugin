@@ -76,11 +76,6 @@
             </div>
         </div>
     </div>
-
-    <footer class="fixed-footer">
-        <img src="${url.resourcesPath}/img/footer.png" />
-        Powered by DoD Platform One
-    </footer>
 </body>
 </html>
 </#macro>

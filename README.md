@@ -11,7 +11,7 @@ The plugin includes an OCSP (Online Certificate Status Protocol) authenticator t
    - Navigate to Authentication > Flows
    - Select or create an authentication flow
    - Click "Add execution"
-   - Select "Platform One OCSP Check" from the dropdown
+   - Select "RAP OCSP check" from the dropdown
    - Set the requirement to "REQUIRED"
 
 2. Configure the OCSP authenticator using the following environment variables:

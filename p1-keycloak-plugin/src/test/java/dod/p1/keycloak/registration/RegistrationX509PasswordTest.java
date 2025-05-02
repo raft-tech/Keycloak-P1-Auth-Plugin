@@ -217,7 +217,7 @@ class RegistrationX509PasswordTest {
     void testGetDisplayType() {
         RegistrationX509Password registration = new RegistrationX509Password();
         // Expect the display type as implemented.
-        assertEquals("Platform One X509 Password Validation", registration.getDisplayType());
+        assertEquals("RAP X509 Password Validation", registration.getDisplayType());
     }
 
     @Test

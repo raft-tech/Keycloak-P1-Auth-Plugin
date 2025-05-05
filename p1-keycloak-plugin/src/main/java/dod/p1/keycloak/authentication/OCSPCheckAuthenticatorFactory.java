@@ -94,7 +94,7 @@ public class OCSPCheckAuthenticatorFactory implements AuthenticatorFactory {
      */
     @Override
     public String getDisplayType() {
-        return "RAP OCSP check";
+        return "Platform One OCSP check";
     }
 
     /**

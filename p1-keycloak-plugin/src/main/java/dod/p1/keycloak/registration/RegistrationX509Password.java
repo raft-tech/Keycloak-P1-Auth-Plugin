@@ -169,7 +169,7 @@ public class RegistrationX509Password extends RegistrationPassword {
      */
     @Override
     public String getDisplayType() {
-        return "RAP X509 Password Validation";
+        return "Platform One X509 Password Validation";
     }
 
     /**

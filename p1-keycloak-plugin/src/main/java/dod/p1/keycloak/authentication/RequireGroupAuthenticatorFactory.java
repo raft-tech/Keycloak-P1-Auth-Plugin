@@ -64,7 +64,7 @@ public class RequireGroupAuthenticatorFactory implements AuthenticatorFactory {
      */
     @Override
     public String getDisplayType() {
-        return "RAP Group Authentication Validation";
+        return "Platform One Group Authentication Validation";
     }
 
     /**

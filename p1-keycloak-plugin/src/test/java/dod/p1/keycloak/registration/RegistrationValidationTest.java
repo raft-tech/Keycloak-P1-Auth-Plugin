@@ -554,7 +554,7 @@ class RegistrationValidationTest {
     @Test
     void testGetDisplayType() {
         RegistrationValidation subject = new RegistrationValidation();
-        assertEquals("RAP Registration Validation", subject.getDisplayType());
+        assertEquals("Platform One Registration Validation", subject.getDisplayType());
     }
 
     @Test

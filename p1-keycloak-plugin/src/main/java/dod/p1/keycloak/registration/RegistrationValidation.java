@@ -357,7 +357,7 @@ public class RegistrationValidation extends RegistrationUserCreation {
      */
     @Override
     public String getDisplayType() {
-        return "RAP Registration Validation";
+        return "Platform One Registration Validation";
     }
 
     /**

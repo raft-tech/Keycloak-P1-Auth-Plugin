@@ -64,7 +64,7 @@ class OCSPCheckAuthenticatorFactoryTest {
 
     @Test
     void testGetDisplayType() {
-        String EXPECTED_DISPLAY_TYPE = "RAP OCSP check";
+        String EXPECTED_DISPLAY_TYPE = "Platform One OCSP check";
         assertEquals(EXPECTED_DISPLAY_TYPE, ocspCheckAuthenticatorFactory.getDisplayType());
     }
 

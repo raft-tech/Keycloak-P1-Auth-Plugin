@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 class RequireGroupAuthenticatorFactoryTest {
 
     public static final String EXPECTED_ID = "p1-group-restriction";
-    public static final String EXPECTED_NAME = "RAP Group Authentication Validation";
+    public static final String EXPECTED_NAME = "Platform One Group Authentication Validation";
 
     private RequireGroupAuthenticatorFactory subjectUnderTest;
 

@@ -376,7 +376,6 @@ ul#kc-totp-supported-apps {
 }
 
 .card {
-  /* clip-path: polygon(0 0, 100% 0, 100% 100%, 36px 100%, 0 calc(100% - 36px)); */
   position: relative;
   z-index: 1;
   margin-top: 5%;
@@ -405,6 +404,7 @@ ul#kc-totp-supported-apps {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 37px 100%, 0 calc(100% - 37px));
   background-color: var(--colorP11);
   border: 1px solid var(--colorE1);
+  padding: 40px;
 }
 
 .card.card-wide {

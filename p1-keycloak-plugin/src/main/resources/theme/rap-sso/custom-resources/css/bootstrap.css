@@ -2634,14 +2634,25 @@ fieldset:disabled a.btn {
   box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
 }
 .btn-light {
-  color: #212529;
-  background-color: #f8f9fa;
-  border-color: #f8f9fa;
+  border-color: var(--colorT4);
+  font-size: 16px;
+  line-height: 1.2;
+  font-family: var(--headingFontFamily);
+  font-weight: var(--bold);
+  padding: 9.5px 11.5px 9px;
+  color: var(--buttonColor, var(--colorP4));
+  background-color: var(--buttonBgColor, var(--colorP1));
+  border-radius: 0;
+  display: inline-block;
+  transition-property: box-shadow, border-radius, background-color, color;
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.2s;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 .btn-light:hover {
-  color: #212529;
-  background-color: #e2e6ea;
-  border-color: #dae0e5;
+  color: var(--colorP2);
+  border-color: var(--colorP2);
 }
 .btn-light.focus,
 .btn-light:focus {
@@ -4442,9 +4453,7 @@ input[type="submit"].btn-block {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
 }
 .card > hr {
@@ -4493,9 +4502,7 @@ input[type="submit"].btn-block {
 }
 .card-header {
   padding: 0.75rem 1.25rem;
-  margin-bottom: 0;
-  background-color: rgba(0, 0, 0, 0.03);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  margin-bottom: 5%;
 }
 .card-header:first-child {
   border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;

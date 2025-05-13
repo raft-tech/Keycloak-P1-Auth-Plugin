@@ -57,10 +57,10 @@ public class ZacsOCSPProviderTest5 {
     private X509Certificate issuerCertificate;
 
     private ZacsOCSPProvider provider;
-    
+
     private static MockedStatic<Config> configMock;
     private static Config.Scope mockScope;
-    
+
     @BeforeAll
     public static void setUpAll() {
         // Mock Config class
@@ -68,11 +68,11 @@ public class ZacsOCSPProviderTest5 {
         // Default to empty strings
         when(mockScope.get(eq("nonceIgnoreList"), anyString())).thenReturn("");
         when(mockScope.get(eq("ignoreList"), anyString())).thenReturn("");
-        
+
         configMock = Mockito.mockStatic(Config.class);
-        configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(mockScope);
+        configMock.when(() -> Config.scope("rapOcsp")).thenReturn(mockScope);
     }
-    
+
     @AfterAll
     public static void tearDownAll() {
         if (configMock != null) {
@@ -109,7 +109,7 @@ public class ZacsOCSPProviderTest5 {
         for (String part : parts) {
             result.add(part.trim());
         }
-        
+
         // Verify
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -130,7 +130,7 @@ public class ZacsOCSPProviderTest5 {
         for (String part : parts) {
             result.add(part.trim());
         }
-        
+
         // Verify
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -145,23 +145,23 @@ public class ZacsOCSPProviderTest5 {
     @Test
     public void testLoadNonceExcludedResponders_WithException() throws Exception {
         // Setup - make the Config.scope() throw an exception
-        configMock.when(() -> Config.scope("babyYodaOcsp")).thenThrow(new RuntimeException("Test exception"));
-        
+        configMock.when(() -> Config.scope("rapOcsp")).thenThrow(new RuntimeException("Test exception"));
+
         // Create a new provider to trigger static initialization
         // This should catch the exception and return an empty list
         ZacsOCSPProvider newProvider = new ZacsOCSPProvider();
-        
+
         // Use reflection to access the private static field
         Field field = ZacsOCSPProvider.class.getDeclaredField("NONCE_EXCLUDED_RESPONDERS");
         field.setAccessible(true);
         List<String> result = (List<String>) field.get(null);
-        
+
         // Verify - should handle the exception and return an empty list
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        
+
         // Reset for other tests
-        configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(mockScope);
+        configMock.when(() -> Config.scope("rapOcsp")).thenReturn(mockScope);
     }
 
     /**
@@ -187,7 +187,7 @@ public class ZacsOCSPProviderTest5 {
                 return null;
             }
         };
-        
+
         // Verify the methods of the anonymous class
         assertEquals(BCOCSPProvider.RevocationStatus.GOOD, status.getRevocationStatus());
         assertEquals(java.security.cert.CRLReason.UNSPECIFIED, status.getRevocationReason());
@@ -203,9 +203,9 @@ public class ZacsOCSPProviderTest5 {
         // Test the shouldIgnoreNonce method directly
         String responderURI = "http://example.com/ocsp";
         List<String> ignoreList = List.of("example.com");
-        
+
         boolean result = provider.shouldIgnoreNonce(responderURI, ignoreList);
-        
+
         // Verify that nonce should be ignored for this responder
         assertTrue(result);
     }
@@ -219,9 +219,9 @@ public class ZacsOCSPProviderTest5 {
         // Test the shouldIgnoreNonce method with uppercase in the URI
         String responderURI = "http://EXAMPLE.com/ocsp";
         List<String> ignoreList = List.of("example.com");
-        
+
         boolean result = provider.shouldIgnoreNonce(responderURI, ignoreList);
-        
+
         // Verify that nonce should be ignored for this responder (case insensitive)
         assertTrue(result);
     }
@@ -234,11 +234,11 @@ public class ZacsOCSPProviderTest5 {
     public void testOperatorCreationException() throws Exception {
         // Create a custom exception to simulate the OperatorCreationException
         Exception operatorException = new OperatorCreationException("Test exception");
-        
+
         // Create a CertPathValidatorException that wraps the OperatorCreationException
         CertPathValidatorException exception = new CertPathValidatorException(
                 "OCSP check failed due to operator creation error", operatorException);
-        
+
         // Verify the exception properties
         assertEquals("OCSP check failed due to operator creation error", exception.getMessage());
         assertEquals(operatorException, exception.getCause());
@@ -254,12 +254,12 @@ public class ZacsOCSPProviderTest5 {
         // Mock JWEUtils to throw an exception
         try (MockedStatic<JWEUtils> jweUtilsMock = Mockito.mockStatic(JWEUtils.class)) {
             jweUtilsMock.when(() -> JWEUtils.generateSecret(anyInt())).thenThrow(new RuntimeException("Test exception"));
-            
+
             // Call the generateNonce method
             Exception exception = assertThrows(Exception.class, () -> {
                 invokePrivateMethod(provider, "generateNonce", new Class[] {});
             });
-            
+
             // Verify the exception is wrapped in OcspNonceGenerationException
             assertTrue(exception.getCause().getMessage().contains("Nonce generation failed"));
         }
@@ -273,12 +273,12 @@ public class ZacsOCSPProviderTest5 {
     public void testOcspNonceGenerationException() throws Exception {
         // Get the OcspNonceGenerationException class
         Class<?> exceptionClass = Class.forName("dod.p1.keycloak.utils.ZacsOCSPProvider$OcspNonceGenerationException");
-        
+
         // Create an instance of the exception
         Exception cause = new RuntimeException("Test cause");
         Exception exception = (Exception) exceptionClass.getDeclaredConstructor(String.class, Throwable.class)
                 .newInstance("Test message", cause);
-        
+
         // Verify the exception properties
         assertEquals("Test message", exception.getMessage());
         assertEquals(cause, exception.getCause());
@@ -294,25 +294,25 @@ public class ZacsOCSPProviderTest5 {
         BasicOCSPResp basicResp = mock(BasicOCSPResp.class);
         X509Certificate issuerCert = TestCertificateGenerator.generateSelfSignedCertificate();
         X509Certificate responderCert = mock(X509Certificate.class);
-        
+
         // Create a request nonce
         byte[] requestNonceBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
         DEROctetString requestNonce = new DEROctetString(requestNonceBytes);
-        
+
         // Mock the nonce extension in the response
         when(basicResp.hasExtensions()).thenReturn(true);
         Extension responseNonce = mock(Extension.class);
         when(basicResp.getExtension(OCSPObjectIdentifiers.id_pkix_ocsp_nonce)).thenReturn(responseNonce);
-        
+
         // Make getExtnValue throw IllegalArgumentException
         when(responseNonce.getExtnValue()).thenThrow(new IllegalArgumentException("Test exception"));
-        
+
         // Test with enforced nonce
         Exception ex = assertThrows(InvocationTargetException.class, () -> invokePrivateMethod(provider, "verifyResponse",
                 new Class[] { BasicOCSPResp.class, X509Certificate.class, X509Certificate.class,
                         DEROctetString.class, Date.class, boolean.class },
                 basicResp, issuerCert, responderCert, requestNonce, new Date(), true));
-        
+
         Throwable cause = ex.getCause();
         assertNotNull(cause);
         assertTrue(cause instanceof CertPathValidatorException);
@@ -328,35 +328,35 @@ public class ZacsOCSPProviderTest5 {
         // Setup
         BasicOCSPResp basicResp = mock(BasicOCSPResp.class);
         X509Certificate responderCert = TestCertificateGenerator.generateSelfSignedCertificate();
-        
+
         // Mock the signature verification to return false
         when(basicResp.isSignatureValid(any())).thenReturn(false);
-        
+
         // Call verifySignature directly
         boolean result = invokePrivateMethod(provider, "verifySignature",
                 new Class[] { BasicOCSPResp.class, X509Certificate.class },
                 basicResp, responderCert);
-        
+
         // Verify the result is false
         assertFalse(result);
-        
+
         // Now test that verifyResponse throws an exception when verifySignature returns false
         try {
             // Setup for verifyResponse
             X509Certificate issuerCert = TestCertificateGenerator.generateSelfSignedCertificate();
-            
+
             // Mock responderCert for validateResponderCertificate
             X509Certificate mockResponderCert = mock(X509Certificate.class);
             doNothing().when(mockResponderCert).verify(any());
             List<String> eku = List.of(org.bouncycastle.asn1.x509.KeyPurposeId.id_kp_OCSPSigning.getId());
             when(mockResponderCert.getExtendedKeyUsage()).thenReturn(eku);
-            
+
             // This should throw an exception because verifySignature returns false
             invokePrivateMethod(provider, "verifyResponse",
                     new Class[] { BasicOCSPResp.class, X509Certificate.class, X509Certificate.class,
                             DEROctetString.class, Date.class, boolean.class },
                     basicResp, issuerCert, mockResponderCert, null, new Date(), false);
-            
+
             fail("Expected CertPathValidatorException was not thrown");
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
@@ -375,22 +375,22 @@ public class ZacsOCSPProviderTest5 {
         // Setup
         X509Certificate responderCert = mock(X509Certificate.class);
         X509Certificate issuerCert = TestCertificateGenerator.generateSelfSignedCertificate();
-        
+
         // Mock the responder certificate to pass verification
         doNothing().when(responderCert).verify(any());
-        
+
         // Mock the extended key usage to include OCSP Signing
         List<String> eku = List.of(org.bouncycastle.asn1.x509.KeyPurposeId.id_kp_OCSPSigning.getId());
         when(responderCert.getExtendedKeyUsage()).thenReturn(eku);
-        
+
         // Mock the certificate validity check with null date
         doNothing().when(responderCert).checkValidity();
-        
+
         // Call validateResponderCertificate with null date
         invokePrivateMethod(provider, "validateResponderCertificate",
                 new Class[] { X509Certificate.class, X509Certificate.class, Date.class },
                 responderCert, issuerCert, null);
-        
+
         // Verify that checkValidity() was called (without a date parameter)
         verify(responderCert).checkValidity();
     }
@@ -403,16 +403,16 @@ public class ZacsOCSPProviderTest5 {
     public void testExtractResponderCert() throws Exception {
         // Create a simple test to verify the code path
         // We're not testing the actual functionality, just ensuring code coverage
-        
+
         // Create a mock response with no certificates
         BasicOCSPResp basicResp = mock(BasicOCSPResp.class);
         when(basicResp.getCerts()).thenReturn(new X509CertificateHolder[0]);
-        
+
         X509Certificate issuerCert = TestCertificateGenerator.generateSelfSignedCertificate();
-        
+
         // Call the method - it should return null since there are no certificates
         X509Certificate result = provider.extractResponderCert(basicResp, issuerCert);
-        
+
         // Verify the result is null
         assertNull(result);
     }
@@ -424,20 +424,20 @@ public class ZacsOCSPProviderTest5 {
     @Test
     public void testExtractResponderCertWithException() throws Exception {
         // Create a simple test to verify the exception handling code path
-        
+
         // Create a mock response with a certificate that will cause an exception
         BasicOCSPResp basicResp = mock(BasicOCSPResp.class);
         X509CertificateHolder certHolder = mock(X509CertificateHolder.class);
         when(basicResp.getCerts()).thenReturn(new X509CertificateHolder[] { certHolder });
-        
+
         // The encoded form of the certificate holder will be invalid
         when(certHolder.getEncoded()).thenReturn(new byte[] { 1, 2, 3 }); // Invalid certificate encoding
-        
+
         X509Certificate issuerCert = TestCertificateGenerator.generateSelfSignedCertificate();
-        
+
         // Call the method - it should handle the exception and return null
         X509Certificate result = provider.extractResponderCert(basicResp, issuerCert);
-        
+
         // Verify the result is null
         assertNull(result);
     }

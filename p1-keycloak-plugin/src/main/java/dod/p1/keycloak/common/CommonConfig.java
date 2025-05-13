@@ -168,7 +168,7 @@ public final class CommonConfig {
             multiRealmEnabled = scope.get("enabled", "false");
         }
 
-        if (multiRealmEnabled.equals("true") && !realm.getName().equals("baby-yoda")) {
+        if (multiRealmEnabled.equals("true") && !realm.getName().equals("rap")) {
             return config.getX509().getUserIdentityAttribute() + "_" + realm.getName();
         }
 

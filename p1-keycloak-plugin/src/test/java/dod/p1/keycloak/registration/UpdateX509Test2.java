@@ -47,37 +47,37 @@ public class UpdateX509Test2 {
 
     @Mock
     private RequiredActionContext context;
-    
+
     @Mock
     private KeycloakSession session;
-    
+
     @Mock
     private KeycloakContext keycloakContext;
-    
+
     @Mock
     private RealmModel realm;
-    
+
     @Mock
     private UserModel user;
-    
+
     @Mock
     private HttpRequest httpRequest;
-    
+
     @Mock
     private AuthenticationSessionModel authSession;
-    
+
     @Mock
     private LoginFormsProvider loginFormsProvider;
-    
+
     @Mock
     private Response response;
-    
+
     @Mock
     private KeycloakSessionFactory sessionFactory;
-    
+
     @Mock
     private EventBuilder eventBuilder;
-    
+
     private UpdateX509 updateX509;
     private MockedStatic<Config> configMock;
     private Config.Scope mockScope;
@@ -85,7 +85,7 @@ public class UpdateX509Test2 {
     @BeforeEach
     public void setUp() {
         updateX509 = new UpdateX509();
-        
+
         // Setup common mocks
         when(context.getSession()).thenReturn(session);
         when(context.getRealm()).thenReturn(realm);
@@ -96,11 +96,11 @@ public class UpdateX509Test2 {
         when(session.getContext()).thenReturn(keycloakContext);
         when(keycloakContext.getAuthenticationSession()).thenReturn(authSession);
         when(user.getUsername()).thenReturn("testuser");
-        
+
         // Setup Config.scope mock
         configMock = Mockito.mockStatic(Config.class);
         mockScope = Mockito.mock(Config.Scope.class);
-        configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(mockScope);
+        configMock.when(() -> Config.scope("rapOcsp")).thenReturn(mockScope);
         when(mockScope.get("enabled", "false")).thenReturn("false");
     }
 
@@ -116,10 +116,10 @@ public class UpdateX509Test2 {
     public void testEvaluateTriggers_WithNullUser() {
         // Setup
         when(context.getUser()).thenReturn(null);
-        
+
         // Call the method
         updateX509.evaluateTriggers(context);
-        
+
         // Verify
         verify(context, never()).getAuthenticationSession();
     }
@@ -129,10 +129,10 @@ public class UpdateX509Test2 {
     public void testEvaluateTriggers_WithNullAuthSession() {
         // Setup
         when(context.getAuthenticationSession()).thenReturn(null);
-        
+
         // Call the method
         updateX509.evaluateTriggers(context);
-        
+
         // Verify
         verify(authSession, never()).getAuthNote(anyString());
     }
@@ -141,13 +141,13 @@ public class UpdateX509Test2 {
     public void testEvaluateTriggers_WithIgnoreX509() {
         // Setup
         when(authSession.getAuthNote("IGNORE_X509")).thenReturn("true");
-        
+
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class)) {
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
-            
+
             // Call the method
             updateX509.evaluateTriggers(context);
-            
+
             // Verify
             verify(user, never()).addRequiredAction(anyString());
         }
@@ -158,10 +158,10 @@ public class UpdateX509Test2 {
         // Setup
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class)) {
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn(null);
-            
+
             // Call the method
             updateX509.evaluateTriggers(context);
-            
+
             // Verify
             verify(user, never()).addRequiredAction(anyString());
         }
@@ -172,19 +172,19 @@ public class UpdateX509Test2 {
         // Setup
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
             x509ToolsMock.when(() -> X509Tools.isX509Registered(context)).thenReturn(false);
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Call the method
             updateX509.evaluateTriggers(context);
-            
+
             // Verify
             verify(user).addRequiredAction("UPDATE_X509");
         }
@@ -195,22 +195,22 @@ public class UpdateX509Test2 {
         // Setup
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
             x509ToolsMock.when(() -> X509Tools.isX509Registered(context)).thenReturn(true);
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Setup user with activeCAC attribute
             when(user.getFirstAttribute("activeCAC")).thenReturn("test-x509-username");
-            
+
             // Call the method
             updateX509.evaluateTriggers(context);
-            
+
             // Verify
             verify(user, never()).addRequiredAction(anyString());
         }
@@ -222,22 +222,22 @@ public class UpdateX509Test2 {
         // Setup
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
             x509ToolsMock.when(() -> X509Tools.isX509Registered(context)).thenReturn(true);
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Setup user with different activeCAC attribute
             when(user.getFirstAttribute("activeCAC")).thenReturn("different-x509-username");
-            
+
             // Call the method
             updateX509.evaluateTriggers(context);
-            
+
             // Verify
             verify(user).addRequiredAction("UPDATE_X509");
         }
@@ -250,26 +250,26 @@ public class UpdateX509Test2 {
         MultivaluedMap<String, String> formData = new MultivaluedMapImpl<>();
         formData.add("confirm", "true");
         when(httpRequest.getDecodedFormParameters()).thenReturn(formData);
-        
+
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserIdentityAttribute(realm)).thenReturn("userIdentityAttr");
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Setup OCSPUtils mock to return empty certs array
             ocspUtilsMock.when(() -> OCSPUtils.getCertificateChain(context)).thenReturn(new X509Certificate[0]);
-            
+
             // Call the method
             updateX509.processAction(context);
-            
+
             // Verify
             verify(user).setSingleAttribute("userIdentityAttr", "test-x509-username");
             verify(user).setSingleAttribute("activeCAC", "test-x509-username");
@@ -285,33 +285,33 @@ public class UpdateX509Test2 {
         formData.add("confirm", "true");
         when(httpRequest.getDecodedFormParameters()).thenReturn(formData);
         when(mockScope.get("enabled", "false")).thenReturn("true");
-        
+
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserIdentityAttribute(realm)).thenReturn("userIdentityAttr");
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Setup OCSPUtils mock
             X509Certificate cert = Utils.buildTestCertificate();
             X509Certificate[] certs = new X509Certificate[]{cert};
             ocspUtilsMock.when(() -> OCSPUtils.getCertificateChain(context)).thenReturn(certs);
-            
+
             // Create a mock OCSPResult
             OCSPUtils.OCSPResult ocspResult = mock(OCSPUtils.OCSPResult.class);
             when(ocspResult.isOCSPGood()).thenReturn(true);
             ocspUtilsMock.when(() -> OCSPUtils.performOCSPCheck(session, certs)).thenReturn(ocspResult);
-            
+
             // Call the method
             updateX509.processAction(context);
-            
+
             // Verify
             verify(authSession).setAuthNote("authenticated_via_x509", "true");
             verify(user).setSingleAttribute("userIdentityAttr", "test-x509-username");
@@ -328,34 +328,34 @@ public class UpdateX509Test2 {
         formData.add("confirm", "true");
         when(httpRequest.getDecodedFormParameters()).thenReturn(formData);
         when(mockScope.get("enabled", "false")).thenReturn("true");
-        
+
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserIdentityAttribute(realm)).thenReturn("userIdentityAttr");
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Setup OCSPUtils mock
             X509Certificate cert = Utils.buildTestCertificate();
             X509Certificate[] certs = new X509Certificate[]{cert};
             ocspUtilsMock.when(() -> OCSPUtils.getCertificateChain(context)).thenReturn(certs);
-            
+
             // Create a mock OCSPResult
             OCSPUtils.OCSPResult ocspResult = mock(OCSPUtils.OCSPResult.class);
             when(ocspResult.isOCSPGood()).thenReturn(false);
             when(ocspResult.getFailureReason()).thenReturn("Certificate revoked");
             ocspUtilsMock.when(() -> OCSPUtils.performOCSPCheck(session, certs)).thenReturn(ocspResult);
-            
+
             // Call the method
             updateX509.processAction(context);
-            
+
             // Verify
             verify(authSession, never()).setAuthNote(eq("authenticated_via_x509"), anyString());
             verify(user, never()).setSingleAttribute(eq("userIdentityAttr"), anyString());
@@ -372,26 +372,26 @@ public class UpdateX509Test2 {
         formData.add("confirm", "true");
         when(httpRequest.getDecodedFormParameters()).thenReturn(formData);
         when(mockScope.get("enabled", "false")).thenReturn("true");
-        
+
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserIdentityAttribute(realm)).thenReturn("userIdentityAttr");
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Setup OCSPUtils mock
             ocspUtilsMock.when(() -> OCSPUtils.getCertificateChain(context)).thenReturn(null);
-            
+
             // Call the method
             updateX509.processAction(context);
-            
+
             // Verify
             verify(authSession, never()).setAuthNote(eq("authenticated_via_x509"), anyString());
             verify(user, never()).setSingleAttribute(eq("userIdentityAttr"), anyString());
@@ -408,26 +408,26 @@ public class UpdateX509Test2 {
         formData.add("confirm", "true");
         when(httpRequest.getDecodedFormParameters()).thenReturn(formData);
         when(mockScope.get("enabled", "false")).thenReturn("true");
-        
+
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserIdentityAttribute(realm)).thenReturn("userIdentityAttr");
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Setup OCSPUtils mock
             ocspUtilsMock.when(() -> OCSPUtils.getCertificateChain(context)).thenReturn(new X509Certificate[0]);
-            
+
             // Call the method
             updateX509.processAction(context);
-            
+
             // Verify
             verify(authSession, never()).setAuthNote(eq("authenticated_via_x509"), anyString());
             verify(user, never()).setSingleAttribute(eq("userIdentityAttr"), anyString());
@@ -444,29 +444,29 @@ public class UpdateX509Test2 {
         formData.add("confirm", "true");
         when(httpRequest.getDecodedFormParameters()).thenReturn(formData);
         when(mockScope.get("enabled", "false")).thenReturn("true");
-        
+
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class);
              MockedStatic<CommonConfig> commonConfigMock = mockStatic(CommonConfig.class);
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
-            
+
             // Setup X509Tools mock
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
-            
+
             // Setup CommonConfig mock
             CommonConfig commonConfig = mock(CommonConfig.class);
             commonConfigMock.when(() -> CommonConfig.getInstance(session, realm)).thenReturn(commonConfig);
             when(commonConfig.getUserIdentityAttribute(realm)).thenReturn("userIdentityAttr");
             when(commonConfig.getUserActive509Attribute()).thenReturn("activeCAC");
-            
+
             // Setup OCSPUtils mock
             X509Certificate cert = Utils.buildTestCertificate();
             X509Certificate[] certs = new X509Certificate[]{cert};
             ocspUtilsMock.when(() -> OCSPUtils.getCertificateChain(context)).thenReturn(certs);
             ocspUtilsMock.when(() -> OCSPUtils.performOCSPCheck(session, certs)).thenThrow(new RuntimeException("OCSP Error"));
-            
+
             // Call the method
             updateX509.processAction(context);
-            
+
             // Verify
             verify(authSession, never()).setAuthNote(eq("authenticated_via_x509"), anyString());
             verify(user, never()).setSingleAttribute(eq("userIdentityAttr"), anyString());
@@ -480,10 +480,10 @@ public class UpdateX509Test2 {
         // Setup
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class)) {
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn(null);
-            
+
             // Call the method
             updateX509.requiredActionChallenge(context);
-            
+
             // Verify
             verify(context).failure();
         }
@@ -494,13 +494,13 @@ public class UpdateX509Test2 {
         // Setup
         when(context.form()).thenReturn(loginFormsProvider);
         when(loginFormsProvider.createX509ConfirmPage()).thenReturn(response);
-        
+
         try (MockedStatic<X509Tools> x509ToolsMock = mockStatic(X509Tools.class)) {
             x509ToolsMock.when(() -> X509Tools.getX509Username(context)).thenReturn("test-x509-username");
-            
+
             // Call the method
             updateX509.requiredActionChallenge(context);
-            
+
             // Verify
             verify(loginFormsProvider).setFormData(any(MultivaluedMap.class));
             verify(loginFormsProvider).createX509ConfirmPage();

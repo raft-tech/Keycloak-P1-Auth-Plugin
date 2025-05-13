@@ -46,7 +46,7 @@ public class ZacsOCSPProviderTest1 {
             @Override public Config.Scope scope(String... names) { return this; }
         };
         STATIC_CONFIG_MOCK = mockStatic(Config.class);
-        STATIC_CONFIG_MOCK.when(() -> Config.scope("babyYodaOcsp")).thenReturn(defaultScope);
+        STATIC_CONFIG_MOCK.when(() -> Config.scope("rapOcsp")).thenReturn(defaultScope);
     }
 
     private KeycloakSession session;

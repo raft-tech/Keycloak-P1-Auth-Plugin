@@ -132,7 +132,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
             when(scope.get("CacheEnabled", "false")).thenReturn("false");
@@ -158,7 +158,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
             when(scope.get("CacheEnabled", "false")).thenReturn("true");
@@ -190,7 +190,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
             when(scope.get("CacheEnabled", "false")).thenReturn("true");
@@ -221,7 +221,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
             when(scope.get("CacheEnabled", "false")).thenReturn("true");
@@ -263,7 +263,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
             when(scope.get("CacheEnabled", "false")).thenReturn("true");
@@ -305,7 +305,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
             when(scope.get("CacheEnabled", "false")).thenReturn("true");
@@ -347,7 +347,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("not-a-number");
             when(scope.get("CacheEnabled", "false")).thenReturn("true");
@@ -385,7 +385,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("48"); // Different TTL
             when(scope.get("CacheEnabled", "false")).thenReturn("false"); // Cache disabled
@@ -427,7 +427,7 @@ class OCSPCheckAuthenticatorTest1 {
              MockedStatic<OCSPUtils> ocspUtilsMock = mockStatic(OCSPUtils.class)) {
 
             // Setup
-            configMock.when(() -> Config.scope("babyYodaOcsp")).thenReturn(scope);
+            configMock.when(() -> Config.scope("rapOcsp")).thenReturn(scope);
             when(scope.get("enabled", "false")).thenReturn("true");
             when(scope.get("CacheTTLHours", "24")).thenReturn("24");
             when(scope.get("CacheEnabled", "false")).thenReturn("true");

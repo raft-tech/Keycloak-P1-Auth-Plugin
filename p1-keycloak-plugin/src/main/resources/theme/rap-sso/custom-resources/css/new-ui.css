@@ -238,7 +238,7 @@ ul#kc-totp-supported-apps {
   background-color: var(--colorS1);
   border-color: var(--colorP2);
   border-radius: 6px;
-  color: var(--colorP2);
+  color: var(--colorP4);
   padding: 15px;
   line-height: 2rem;
 }
@@ -249,7 +249,6 @@ ul#kc-totp-supported-apps {
   color: var(--colorP2);
   padding: 15px;
   line-height: 2rem;
-  text-decoration: underline;
 }
 
 .cac-info h2 {

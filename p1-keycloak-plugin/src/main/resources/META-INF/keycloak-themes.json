@@ -7,6 +7,14 @@
         "account",
         "login"
       ]
+    },
+    {
+      "name": "rap-sso",
+      "types": [
+        "admin",
+        "account",
+        "login"
+      ]
     }
   ]
 }
